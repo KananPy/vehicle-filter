@@ -1,34 +1,25 @@
-import { getVehicleModelsByMakeAndYear } from '@/services/vehicleService';
-import Button from '@/components/Button';
+// src/app/result/[makeId]/[year]/page.js
+import VehicleModels from '@/components/VehicleModels';
+import Loading from '@/components/Loading';
+import { Suspense } from 'react';
 import Link from 'next/link';
+import { generateStaticParams } from '@/utils/staticParams';
 
-export default async function Result({ params }) {
+export default function Result({ params }) {
   const { makeId, year } = params;
-  const data = await getVehicleModelsByMakeAndYear(makeId, year);
-  const models = data.Results;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Vehicle Models for {year}</h1>
-
-      {models.length > 0 ? (
-        <ul className="list-disc pl-5">
-          {models.map((model) => (
-            <li key={model.Model_ID} className="border p-2 my-2">
-              {model.Model_Name}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No models found for this make and year.</p>
-      )}
-
-      {/* Back to Home Button */}
+    <Suspense fallback={<Loading />}>
+      <VehicleModels makeId={makeId} year={year} />
       <div className="mt-6">
         <Link href="/" passHref>
-          <Button text="Back to Home" />
+          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">
+            Back to Home
+          </button>
         </Link>
       </div>
-    </div>
+    </Suspense>
   );
 }
+
+export { generateStaticParams };

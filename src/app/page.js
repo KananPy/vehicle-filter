@@ -1,9 +1,8 @@
+// src/app/page.js
 'use client';
 
 import { useState, useEffect } from 'react';
 import { getVehicleMakes } from '@/services/vehicleService';
-import Dropdown from '@/components/Dropdown';
-import Button from '@/components/Button';
 import Link from 'next/link';
 
 export default function Home() {
@@ -17,10 +16,9 @@ export default function Home() {
     const fetchMakes = async () => {
       try {
         const data = await getVehicleMakes();
-        const sortedMakes = data.Results.map((make) => ({
-          label: make.MakeName,
-          value: make.MakeId,
-        })).sort((a, b) => a.label.localeCompare(b.label));
+        const sortedMakes = data.Results.sort((a, b) =>
+          a.MakeName.localeCompare(b.MakeName)
+        );
         setMakes(sortedMakes);
       } catch (error) {
         console.error('Error fetching vehicle makes:', error);
@@ -35,22 +33,49 @@ export default function Home() {
         Select Vehicle Make and Model Year
       </h1>
 
-      <Dropdown
-        label="Vehicle Make"
-        options={makes}
-        value={selectedMake}
-        onChange={(e) => setSelectedMake(e.target.value)}
-      />
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium">Vehicle Make</label>
+        <select
+          value={selectedMake}
+          onChange={(e) => setSelectedMake(e.target.value)}
+          className="border p-2 rounded w-full text-black"
+        >
+          <option value="">Select Vehicle Make</option>
+          {makes.map((make) => (
+            <option key={make.MakeId} value={make.MakeId}>
+              {make.MakeName}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <Dropdown
-        label="Model Year"
-        options={years.map((year) => ({ label: year, value: year }))}
-        value={selectedYear}
-        onChange={(e) => setSelectedYear(e.target.value)}
-      />
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium">Model Year</label>
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="border p-2 rounded w-full text-black"
+        >
+          <option value="">Select Model Year</option>
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <Link href={`/result/${selectedMake}/${selectedYear}`} passHref>
-        <Button text="Next" disabled={!selectedMake || !selectedYear} />
+        <button
+          disabled={!selectedMake || !selectedYear}
+          className={`${
+            !selectedMake || !selectedYear
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-blue-500 hover:bg-blue-600'
+          } text-white font-bold py-2 px-4 rounded-lg w-full`}
+        >
+          Next
+        </button>
       </Link>
     </div>
   );
