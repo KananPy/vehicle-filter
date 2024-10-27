@@ -1,4 +1,3 @@
-// src/app/result/[makeId]/[year]/page.js
 import VehicleModels from '@/components/VehicleModels';
 import Loading from '@/components/Loading';
 import { Suspense } from 'react';

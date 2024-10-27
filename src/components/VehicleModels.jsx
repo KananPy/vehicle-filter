@@ -1,4 +1,3 @@
-// src/components/VehicleModels.jsx
 import { getVehicleModelsByMakeAndYear } from '@/services/vehicleService';
 
 export default async function VehicleModels({ makeId, year }) {
