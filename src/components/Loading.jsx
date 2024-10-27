@@ -1,4 +1,3 @@
 export default function Loading() {
-    return <p>Loading vehicle models...</p>;
-  }
-  
+  return <p>Loading vehicle models...</p>;
+}
